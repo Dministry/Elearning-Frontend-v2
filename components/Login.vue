@@ -1,70 +1,76 @@
 <template>
-<v-layout row wrap justify-space-between mt-4>
-    <v-flex md6 xs12 mt-4>
-      <img class="image" src="~/assets/images/undraw_teaching_f1cm.png" alt="">
-    </v-flex>
-    
-    <v-flex md6 xs12 mt-4>
-      <v-form v-model="valid" class="login-container" >
-        <v-container>
-        <v-row>
-          <v-col
-            cols="12"
-            md="12"
-          >
-            <v-text-field
-              text-align-center
-              filled
-              v-model="email"
-              label="Email"
-              type="email"
-              append-icon="mdi-email"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col
-            cols="12"
-            md="12"
-          >
-            <v-text-field
-              filled
-              label="Password"
-              append-icon="mdi-account-lock"
-              type="password"
-              v-model="password"
-            ></v-text-field>
-          </v-col>
-
-        </v-row>
-
-        <v-row>
-          <v-col
-            cols="12"
-            md="12"
-          >
-          <span>Don't have an account? <a href="/signup">Register</a></span>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col
-            cols="12"
-            md="12"
-          >
-          <v-btn class=" blue--text"
-          @click.prevent="onSubmit"
-          >
-            <span class="login-btn">Login</span>
-          </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-      </v-form>
+  <v-layout row wrap justify-space-between mt-4>
+      <v-flex md6 xs12 mt-4>
+        <img class="image" src="~/assets/images/undraw_teaching_f1cm.png" alt="">
+      </v-flex>
       
-    
-  </v-flex>
-</v-layout>
+      <v-flex md6 xs12 mt-4>
+        <v-form v-model="valid" class="login-container" >
+          <v-container>
+          <v-row>
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <v-text-field
+                text-align-center
+                filled
+                v-model="email"
+                label="Email"
+                type="email"
+                append-icon="mdi-email"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <v-text-field
+                filled
+                label="Password"
+                append-icon="mdi-account-lock"
+                type="password"
+                v-model="password"
+              ></v-text-field>
+            </v-col>
+
+          </v-row>
+
+          <v-row>
+            <v-col
+              cols="12"
+              md="12"
+            >
+            <span>Don't have an account? <a href="/signup">Register</a></span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+              md="12"
+            >
+            <v-btn class=" blue--text" :disabled='disAbleBtn'
+            @click.prevent="onSubmit"
+            >
+              <span class="login-btn">Login</span>
+            </v-btn>
+            </v-col>
+          </v-row>
+          <v-snackbar
+            v-model="snackbar"
+            timeout="5000"
+          > 
+            {{error}}
+          </v-snackbar>
+        </v-container>
+        </v-form>
+        
+      
+    </v-flex>
+  </v-layout>
 
 <!-- <div> 
       <label for="logo" class="logo">MATHAGE</label>
@@ -97,15 +103,9 @@
       valid: false,
       email: '',
       password: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => v.length <= 10 || 'Name must be less than 10 characters',
-      ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
-      ],
+      snackbar: false,
+      error: '',
+      disAbleBtn: false
     }),
 
     methods: {
@@ -115,6 +115,8 @@
           password: this.password
         }
         try {
+          //disable login button
+          this.disAbleBtn = true;
           const details = await this.$axios.$post(
             'http://localhost:3333/api/v1/login',
             userData
@@ -127,9 +129,15 @@
               'details',
             JSON.stringify(details.message)
           )
+          //enable login button
+          this.disAbleBtn = false;
           this.$router.push('/courses');
         } catch (error) {
-          
+          console.log(error)
+          this.disAbleBtn = false;
+          this.error = error.response.data.message
+          this.snackbar = true
+          setTimeout(() => this.snackbar = false, 5000 );
           console.log(error.response)
         }
       }

@@ -83,8 +83,8 @@ export default {
          { 
            title: 'All Users', icon: 'mdi-information', to: '' },
          { title: 'All Courses', icon: 'mdi-information', to: '' },
-         { title: 'Schedule Free Class', icon: 'mdi-information', to: '' },
-         { title: 'Add Free Course', icon: 'mdi-radiobox-marked', to: '' },
+         { title: 'Schedule Free Class', icon: 'mdi-information', to: '/admin/addFreeCourseSchedule' },
+         { title: 'Add Free Course', icon: 'mdi-radiobox-marked', to: '/admin/addFreeCourse' },
          { title: 'Class Requests', icon: 'mdi-clock', to: '' },
          { title: 'Logout', icon: 'mdi-logout', to: '' }
       ],

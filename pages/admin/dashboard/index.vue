@@ -11,7 +11,7 @@
   </v-layout>
     <v-layout row wrap justify-center class="mt-4">
 
-      <v-flex md4 ma-1 class="pr-2" @click="goToProcurementOfficerBiodata()">
+      <v-flex md4 ma-1 class="pr-2" >
         <v-card
           color="blue-grey darken-2"
           :hover="hoverVariable"
@@ -27,7 +27,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex md4 ma-1 class="pr-2" @click="goToCareerMobility()">
+      <v-flex md4 ma-1 class="pr-2" >
         <v-card
           color="blue-grey darken-2"
           :hover="hoverVariable"
@@ -43,7 +43,7 @@
         </v-card>
       </v-flex>
 
-       <v-flex ma-1 md4 class="pr-2" @click="goToAcademicQualification()">
+       <v-flex ma-1 md4 class="pr-2">
         <v-card
           color="blue-grey darken-2"
           :hover="hoverVariable"
@@ -59,7 +59,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex ma-1 md4 class="pr-2" @click="goToAcademicQualification()">
+      <v-flex ma-1 md4 class="pr-2" @click="goToFreeSchedule()">
         <v-card
           color="blue-grey darken-2"
           :hover="hoverVariable"
@@ -75,7 +75,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex ma-1 md4 class="pr-2" @click="goToAcademicQualification()">
+      <v-flex ma-1 md4 class="pr-2" @click="goToFreeCourse()">
         <v-card
           color="blue-grey darken-2"
           :hover="hoverVariable"
@@ -109,6 +109,14 @@ export default {
   },
 
   methods: {
+
+    goToFreeCourse(){
+      this.$router.push('/admin/addFreeCourse')
+    },
+
+    goToFreeSchedule(){
+      this.$router.push('/admin/addFreeCourseSchedule')
+    }
     
   }
 }

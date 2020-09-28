@@ -25,6 +25,7 @@
                 md="12"
               >
                 <v-text-field
+                  v-model="firstName"
                   text-align-center
                   filled
                   label="First Name"
@@ -40,9 +41,10 @@
                 md="12"
               >
                 <v-text-field
+                  v-model="lastName"
                   text-align-center
                   filled
-                  label="Last Name"
+                  label="Surname Name"
                   type="text"
                   append-icon="mdi-information"
                 ></v-text-field>
@@ -54,6 +56,7 @@
                 md="12"
               >
                 <v-textarea
+                v-model= "description"
                 solo
                 name="description"
                 label="A short description about yourself."
@@ -68,6 +71,7 @@
                 md="12"
               >
                 <v-text-field
+                  v-model="email"
                   text-align-center
                   filled
                   label="Email"
@@ -99,6 +103,7 @@
                 md="12"
               >
                 <v-text-field
+                  v-model="mobileNumber"
                   text-align-center
                   filled
                   label="mobileNumber"
@@ -122,12 +127,18 @@
                 cols="12"
                 md="12"
               >
-              <v-btn>
+              <v-btn :disabled="disAbleBtn" @click.prevent="onSubmit">
                 <span class="signup-btn">Signup</span>
               </v-btn>
               </v-col>
             </v-row>
           </v-container>
+          <v-snackbar
+            v-model="snackbar"
+            timeout="5000"
+          > 
+            {{error}}
+          </v-snackbar>
         </v-form>
       </v-flex>
   </v-layout>
@@ -169,19 +180,57 @@
 export default {
     data: () => ({
       valid: false,
+      firstName: '',
+      lastName: '',
+      description: '',
+      mobileNumber: '',
       email: '',
       password: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => v.length <= 10 || 'Name must be less than 10 characters',
-      ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
-      ],
+      snackbar: false,
+      error: '',
+      disAbleBtn: false
     }),
+
+    methods: {
+      async onSubmit(){
+        const userData = {
+          email: this.email,
+          password: this.password,
+          description: this.description,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          mobileNumber: this.mobileNumber
+        }
+        try {
+          //disable login button
+          this.disAbleBtn = true;
+          const details = await this.$axios.$post(
+            'http://localhost:3333/api/v1/register',
+            userData
+          )
+          // commit to store
+          this.$store.dispatch('setStoreValue', details.message);
+
+          // store in local storage
+          localStorage.setItem(
+              'details',
+            JSON.stringify(details.message)
+          )
+          //enable login button
+          this.disAbleBtn = false;
+          this.$router.push('/courses');
+        } catch (error) {
+
+          this.disAbleBtn = false;
+          this.error = 'all fields are not field yet or email already exists'
+          this.snackbar = true
+          setTimeout(() => this.snackbar = false, 5000 );
+          console.log(error.response)
+        }
+      }
+    }
   }
+
 </script>
 
 <style scoped>

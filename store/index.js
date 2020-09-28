@@ -16,6 +16,23 @@ const createStore = () => {
             }
         },
         getters: {
+
+            getUserIsAdmin(state){
+                return state.loadedData.user[0].roleID;
+            },
+
+            getUserDetails(state){
+                return state.loadedData;
+            },
+
+            getUserID(state){
+                return state.loadedData.user[0].userID;
+            },
+
+            getToken(state){
+                return state.loadedData.token;
+            },
+
             publicCourses(state){
                 return state.loadedData.publicCourses;
             },
